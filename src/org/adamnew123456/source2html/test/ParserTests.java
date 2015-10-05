@@ -256,4 +256,20 @@ public class ParserTests {
         assertEquals("Incorrect parse leftover for OneOrMoreParser",
                 stream.toString(), "cde");
     }
+    
+    @Test
+    public void testNegativeLookaheadSuccess() {
+        // This negative-lookahead parser consumes single characters until it 
+        // hits whitespace
+        Parser neg = new NegativeLookaheadParser(new GroupParser(" \n\t"), 
+                new AnyCharParser());
+        
+        CheckpointStream stream = toStream("abcde fghij");
+        Optional<String> result = neg.tryParse(stream);
+        
+        assertEquals("Incorrect parse result for NegativeLookaheadParser",
+                result, Optional.of("abcde"));
+        assertEquals("Incorrect parse leftover for NegativeLookaheadParser",
+                stream.toString(), " fghij");
+    }
 }
