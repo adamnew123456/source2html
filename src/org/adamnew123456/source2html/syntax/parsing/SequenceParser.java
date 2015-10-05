@@ -1,7 +1,5 @@
 package org.adamnew123456.source2html.syntax.parsing;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.Optional;
 
 /**
@@ -16,9 +14,8 @@ public class SequenceParser implements Parser {
     }
     
     @Override
-    public Optional<String> tryParse(Deque<Character> stream) {
-        Deque<Character> copied = new ArrayDeque<>();
-        stream.forEach(elt -> copied.add(elt));
+    public Optional<String> tryParse(CheckpointStream stream) {
+        stream.checkpoint();
         
         StringBuffer result = new StringBuffer();
         for (Parser parser: parsers) {
@@ -27,23 +24,12 @@ public class SequenceParser implements Parser {
             if (intermed_result.isPresent()) {
                 result.append(intermed_result.get());
             } else {
-                // Since we don't care about anything that the input stream
-                // still has, truncate the copied stream to just the part that
-                // the input stream doesn't have
-                int charsRead = copied.size() - stream.size();
-                while (copied.size() > charsRead) {
-                    copied.removeLast();
-                }
-                
-                // Now, rewind the stream by putting on characters from the copy
-                while (copied.size() > 0) {
-                    stream.addFirst(copied.removeLast());
-                }
-                
+                stream.restore();
                 return Optional.empty();
             }
         }
         
+        stream.commit();
         return Optional.of(result.toString());
     }
 

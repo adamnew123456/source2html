@@ -1,6 +1,5 @@
 package org.adamnew123456.source2html.syntax.parsing;
 
-import java.util.Deque;
 import java.util.Optional;
 
 /**
@@ -15,7 +14,7 @@ public class ZeroOrMoreParser implements Parser {
     }
 
     @Override
-    public Optional<String> tryParse(Deque<Character> stream) {
+    public Optional<String> tryParse(CheckpointStream stream) {
         StringBuffer buffer = new StringBuffer();
         Optional<String> result;
         

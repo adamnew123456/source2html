@@ -1,6 +1,5 @@
 package org.adamnew123456.source2html.syntax.parsing;
 
-import java.util.Deque;
 import java.util.Optional;
 
 /**
@@ -15,7 +14,7 @@ public class EitherParser implements Parser {
     }
 
     @Override
-    public Optional<String> tryParse(Deque<Character> stream) {
+    public Optional<String> tryParse(CheckpointStream stream) {
         for (Parser parser: parsers) {
             Optional<String> result = parser.tryParse(stream);
             

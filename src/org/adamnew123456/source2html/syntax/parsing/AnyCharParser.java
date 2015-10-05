@@ -1,6 +1,5 @@
 package org.adamnew123456.source2html.syntax.parsing;
 
-import java.util.Deque;
 import java.util.Optional;
 
 /**
@@ -8,9 +7,9 @@ import java.util.Optional;
  */
 public class AnyCharParser implements Parser {
     @Override
-    public Optional<String> tryParse(Deque<Character> stream) {
+    public Optional<String> tryParse(CheckpointStream stream) {
         if (stream.size() == 0) return Optional.empty();
-        else                    return Optional.of(String.valueOf(stream.removeFirst()));
+        else                    return Optional.of(String.valueOf(stream.get()));
     }
 
 }

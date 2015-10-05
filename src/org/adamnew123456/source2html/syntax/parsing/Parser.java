@@ -9,9 +9,8 @@ package org.adamnew123456.source2html.syntax.parsing;
  * The second part of the 'failure' clause is very important - the parser
  * *must* reset the contents of the stream should it fail.
  */
-import java.util.Deque;
 import java.util.Optional;
 
 public interface Parser {
-    Optional<String> tryParse(Deque<Character> stream);
+    Optional<String> tryParse(CheckpointStream stream);
 }
