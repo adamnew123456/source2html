@@ -28,7 +28,15 @@ public class Token {
     
     @Override
     public String toString() {
-        return String.format("Token[%s] `%s`", type, chunk);
+        return String.format("Token[%s:%d] `%s`", type, chunk.length(), escapedChunk());
+    }
+    
+    private String escapedChunk() {
+        return getChunk()
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\b", "\\b")
+                .replace("\f", "\\f");
     }
     
     public String getChunk() {
@@ -40,17 +48,25 @@ public class Token {
     }
     
     /**
-     * Splits this Token into multiple tokens which respect line boundaries.
+     * Splits this Token into multiple tokens which respect line boundaries,
+     * while keeping newlines at the end of each line.
      */
     public List<Token> splitLines() {
-        if (!chunk.contains("\n")) {
+        if (!chunk.contains("\n") || chunk.equals("\n")) {
             return Arrays.asList(new Token[] { this });
         }
         
         List<Token> out = new ArrayList<Token>();
         String[] lines = chunk.split("\n");
+        int idx = 0;
         for (String line: lines) {
-            out.add(new Token(line, type));
+            if (idx < lines.length - 1) {
+                out.add(new Token(line + "\n", type));
+            } else {
+                out.add(new Token(line, type));
+            }
+            
+            idx++;
         }
         
         return out;

@@ -46,9 +46,17 @@ public class TestToken {
         Token multiLine = new Token("foo\nbar\nbaz", TokenType.RAW);
         assertTrue("The multi-line token did not split correctly",
                 listEq(multiLine.splitLines(),
-                        Arrays.asList(new Token[] { new Token("foo", TokenType.RAW),
-                                                    new Token("bar", TokenType.RAW),
+                        Arrays.asList(new Token[] { new Token("foo\n", TokenType.RAW),
+                                                    new Token("bar\n", TokenType.RAW),
                                                     new Token("baz", TokenType.RAW)
                         })));
+    }
+    
+    @Test
+    public void testNewlineToken() {
+        Token newLine = new Token("\n", TokenType.RAW);
+        assertTrue("The newline token did not split correctly",
+                listEq(newLine.splitLines(),
+                        Arrays.asList(new Token[] { new Token("\n", TokenType.RAW)})));
     }
 }
