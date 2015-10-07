@@ -261,15 +261,16 @@ public class ParserTests {
     public void testNegativeLookaheadSuccess() {
         // This negative-lookahead parser consumes single characters until it 
         // hits whitespace
-        Parser neg = new NegativeLookaheadParser(new GroupParser(" \n\t"), 
+        Parser neg = new NegativeLookaheadParser(
+                new SequenceParser(new GroupParser("."), new GroupParser(" \n\t")), 
                 new AnyCharParser());
         
-        CheckpointStream stream = toStream("abcde fghij");
+        CheckpointStream stream = toStream("abcde.fghij k. lmno");
         Optional<String> result = neg.tryParse(stream);
         
         assertEquals("Incorrect parse result for NegativeLookaheadParser",
-                result, Optional.of("abcde"));
+                result, Optional.of("abcde.fghij k"));
         assertEquals("Incorrect parse leftover for NegativeLookaheadParser",
-                stream.toString(), " fghij");
+                stream.toString(), ". lmno");
     }
 }

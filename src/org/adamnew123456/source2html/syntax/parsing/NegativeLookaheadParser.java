@@ -32,9 +32,12 @@ public class NegativeLookaheadParser implements Parser {
         boolean lookaheadFails = true;
         boolean parserSucceeds = true;
         do {
-            stream.checkpoint();
+            StrongCheckpoint check = stream.strongCheckpoint();
             Optional<String> lookaheadResult = lookahead.tryParse(stream);
-            stream.restore();
+            
+            if (check.needsRestore()) {
+                stream.restore();
+            }
             
             if (lookaheadResult.isPresent()) {
                 lookaheadFails = false;
