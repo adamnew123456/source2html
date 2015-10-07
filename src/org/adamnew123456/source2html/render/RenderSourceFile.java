@@ -1,5 +1,6 @@
 package org.adamnew123456.source2html.render;
 import org.adamnew123456.source2html.JavaFile;
+import org.adamnew123456.source2html.syntax.*;
 
 import java.util.StringJoiner;
 
@@ -26,7 +27,11 @@ public class RenderSourceFile implements Renderable {
     
     private static ST cssTemplate = new ST(
         " body { background: black; color: black }\n"
-        + ".code { color: lightgray }\n"
+        + ".code-raw { color: lightgray }\n"
+        + ".code-comment { color: #00ff00 }\n"
+        + ".code-character { color: #ff9000 }\n"
+        + ".code-string { color: #ff5100 }\n"
+        + ".code-keyword { color: #00ffff }\n"
         + ".lineNumber { color: green; margin-right: 5px  }\n");
     
     public RenderSourceFile(JavaFile code) {
@@ -35,23 +40,57 @@ public class RenderSourceFile implements Renderable {
     
     @Override
     public String toHTML() {
+        System.out.println("[RENDER] " + sourceFile.getPackage().getName() + "/" + sourceFile.getName());
+        
         // Figure out how much to offset the line number by, to keep them all
         // aligned as a single column
         int alignAmount = (int)Math.ceil(Math.log10(sourceFile.getLineCount()));
         String formatString = "%" + alignAmount + "d";
         
         // Render each line, along with their appropriate line numbers
-        StringJoiner codeLines = new StringJoiner("\n");
-        int lineNumber = 1;
-        for (String line: sourceFile.getSource().split("\n")) {
+        StringBuilder codeLines = new StringBuilder("\n");
+        JavaLexer lexer = new JavaLexer(sourceFile.getSource());
+        
+        for (int lineNumber = 1; lexer.hasNext(); lineNumber++) {
             String lineNumberStr = String.format(formatString, lineNumber);
-            
+            StringBuilder lineBuffer = new StringBuilder();
+
+            boolean isEndOfLine = false;
+            for (Token token: lexer) {
+                if (token.getChunk().endsWith("\n")) {
+                    isEndOfLine = true;
+                }
+                
+                switch (token.getTokenType()) {
+                case CHARACTER:
+                    lineBuffer.append("<span class=\"code-character\">");
+                    break;
+                case COMMENT:
+                    lineBuffer.append("<span class=\"code-comment\">");
+                    break;
+                case KEYWORD:
+                    lineBuffer.append("<span class=\"code-keyword\">");
+                    break;
+                case STRING:
+                    lineBuffer.append("<span class=\"code-string\">");
+                    break;
+                case RAW:
+                    lineBuffer.append("<span class=\"code-raw\">");
+                    break;
+                }
+                
+                lineBuffer.append(HTMLUtils.escapeHTML(token.getChunk()));
+                lineBuffer.append("</span>");
+                
+                if (isEndOfLine) {
+                    break;
+                }
+            }
+                
             ST formatLine = new ST(lineTemplate);
             formatLine.add("lineNumber", lineNumberStr);
-            formatLine.add("codeLine", HTMLUtils.escapeHTML(line));
-            codeLines.add(formatLine.render());
-            
-            lineNumber++;
+            formatLine.add("codeLine", lineBuffer.toString());
+            codeLines.append(formatLine.render());
         }
         
         ST formatPage = new ST(fileTemplate);
