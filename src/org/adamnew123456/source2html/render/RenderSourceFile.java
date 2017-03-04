@@ -2,8 +2,6 @@ package org.adamnew123456.source2html.render;
 import org.adamnew123456.source2html.JavaFile;
 import org.adamnew123456.source2html.syntax.*;
 
-import java.util.StringJoiner;
-
 import org.stringtemplate.v4.ST;
 
 /**
