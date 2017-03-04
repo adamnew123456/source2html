@@ -47,6 +47,10 @@ public class JavaFile {
             }
         });
         
+        if (thePackage == null) {
+            thePackage = Package.fromPackageName("default");
+        }
+        
         sourceReader.close();
         reader.close();
     }
