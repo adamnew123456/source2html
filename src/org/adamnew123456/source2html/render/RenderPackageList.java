@@ -59,7 +59,7 @@ public class RenderPackageList implements Renderable {
         '{', '}');
     
     private static ST fileTemplate = new ST(
-        "<a class=\"fileName\" onclick=\"loadCode('{prefix}/{pkgName}/{fileName}.html')\">"
+        "<a class=\"fileName\" onclick=\"loadCode('{prefix}{pkgName}/{fileName}.html')\">"
         + "{fileName}.java"
         + "</a><br/>",
         '{', '}'
