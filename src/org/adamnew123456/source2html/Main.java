@@ -13,8 +13,12 @@ public class Main {
             String input = args[0];
             String output = args[1];
             String prefix;
-            if (args.length >= 3) prefix = args[2];
-            else                  prefix = "/";
+
+            if (args.length >= 3) {
+                prefix = args[2];
+            } else {
+                prefix = "/";
+            }
             
             File inDir = new File(input);
             if (!inDir.exists() || !inDir.isDirectory()) {

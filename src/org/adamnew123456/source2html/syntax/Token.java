@@ -30,7 +30,10 @@ public class Token {
     public String toString() {
         return String.format("Token[%s:%d] `%s`", type, chunk.length(), escapedChunk());
     }
-    
+ 
+    /**
+     * Returns the content of the token, but with whitespace escaped.
+     */
     private String escapedChunk() {
         return getChunk()
                 .replace("\n", "\\n")
@@ -39,10 +42,16 @@ public class Token {
                 .replace("\f", "\\f");
     }
     
+    /**
+     * Returns the raw contents of the token.
+     */
     public String getChunk() {
         return chunk;
     }
     
+    /**
+     * Returns the type of this token.
+     */
     public TokenType getTokenType() {
         return type;
     }

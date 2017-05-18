@@ -16,8 +16,8 @@ public class Package {
      * 
      * - We can easily account for all Packages, which becomes important when
      *   building the packages' link trees.
-     * - Packages can be compared via reference, since no two non-equal packages
-     *   are different objects
+     * - Packages can be compared via reference, since equal packages are the
+     *   same object
      * - Packages will always be reused, avoiding the need to have many little
      *   Package objects floating around everywhere.
      */

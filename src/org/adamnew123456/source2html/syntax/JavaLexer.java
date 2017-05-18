@@ -24,7 +24,7 @@ public class JavaLexer implements Iterator<Token>, Iterable<Token> {
         "class", "finally", "long", "strictfp", "volatile",
         "const", "float", "native", "super", "while",
     });
-    
+
     private static Parser ANY = new AnyCharParser();
     private static Parser SLASH = new GroupParser("/");
     private static Parser BKSLASH = new GroupParser("\\");
@@ -36,13 +36,17 @@ public class JavaLexer implements Iterator<Token>, Iterable<Token> {
     private static Parser DIGIT = new GroupParser("0123456789");
     private static Parser STR_VALID_CHAR = new NegativeGroupParser("\\\n");
     
+    // All backslash escapes that appear in strings and characters
     private static Parser CHAR_ESCAPES =
             new SequenceParser(BKSLASH, new GroupParser("btnfr\"'\\"));
     
+    // The \uXXX escape is special, since it doesn't fit the normal pattern
     private static Parser UNICODE_ESCAPES =
             new SequenceParser(BKSLASH, new GroupParser("u"),
                     DIGIT, DIGIT, DIGIT, DIGIT);
     
+    // This actually captures any lower-case alphabetical identifier - we sort
+    // out the matches later
     private static Parser possibleKeyword =
             new OneOrMoreParser(LOWERCASE);
     
@@ -77,7 +81,9 @@ public class JavaLexer implements Iterator<Token>, Iterable<Token> {
     }
 
     @Override
-    public Iterator<Token> iterator() { return this; }
+    public Iterator<Token> iterator() { 
+        return this; 
+    }
 
     @Override
     public boolean hasNext() { 

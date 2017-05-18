@@ -31,10 +31,11 @@ public abstract class GroupLikeParser implements Parser {
     public Optional<String> tryParse(CheckpointStream stream) {
         if (stream.size() == 0) return Optional.empty();
         
-        if (matches(stream.peek()))
+        if (matches(stream.peek())) {
             return Optional.of(charToString(stream.get()));
-        else
+        } else {
             return Optional.empty();
+        }
     }
 
 }

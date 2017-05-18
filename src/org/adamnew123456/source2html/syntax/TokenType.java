@@ -8,5 +8,7 @@ public enum TokenType {
     CHARACTER,
     STRING,
     KEYWORD,
+
+    // RAW is essentially where we dump anything that isn't any of the above
     RAW,
 }

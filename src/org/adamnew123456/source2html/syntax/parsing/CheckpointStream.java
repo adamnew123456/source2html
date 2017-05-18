@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /**
  * A checkpoint stream is a Deque which has the ability to save parts of its
- * input, and restore them. This is important for parsing, since tere are times
+ * input, and restore them. This is important for parsing, since there are times
  * when a stream has to be reverted, even after characters are read (for example,
  * in a Sequence parser where only a few parsers succeeded, but one of them failed).
  * 
@@ -47,12 +47,24 @@ public class CheckpointStream implements Iterable<Character> {
             isStrong = strong;
         }
 
-        public boolean isStrong() { return isStrong; }
+        /**
+         * Whether this checkpoint is a strong checkpoint or not.
+         */
+        public boolean isStrong() { 
+            return isStrong; 
+        }
 
+        /**
+         * Adds a new character onto the checkpoint, so that it can be added
+         * back onto the stream if the checkpoint is restored.
+         */
         public void record(char c) {
             checkpoint.addFirst(c);
         }
 
+        /**
+         * Copies the saved characters back onto the head of the stream.
+         */
         public void restore(Deque<Character> stream) {
             while (!checkpoint.isEmpty()) {
                 Character elt = checkpoint.removeFirst();
@@ -71,6 +83,10 @@ public class CheckpointStream implements Iterable<Character> {
             wasRestored = true;
         }
         
+        /**
+         * Whether this checkpoint can have restore() called on it to restore
+         * the stream.
+         */
         public boolean needsRestore() {
             return isStrong() && !wasRestored;
         }
@@ -88,8 +104,11 @@ public class CheckpointStream implements Iterable<Character> {
      * Gets the current checkpoint.
      */
     private Optional<Checkpoint> currentCheckpoint() {
-        if (checkpoints.isEmpty()) return Optional.empty();
-        else                       return Optional.of(checkpoints.getFirst());
+        if (checkpoints.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(checkpoints.getFirst());
+        }
     }
     
     /**

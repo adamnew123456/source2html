@@ -36,6 +36,8 @@ public class JavaFile {
         this.name = name;
         sourceLines = new LinkedList<>();
         
+        // Figure out what package we belong to, so that this can be placed
+        // in the proper output directory when rendered
         BufferedReader sourceReader = new BufferedReader(reader);
         sourceReader.lines().forEach(line -> {
             sourceLines.add(line);
@@ -56,14 +58,15 @@ public class JavaFile {
     }
     
     /**
-     * This is the most useful constructor, designed for use with files.
+     * This is the most useful constructor, which consumes a File directly, 
+     * instead of a Reader.
      */
     public JavaFile(File input) throws IOException {
         this(new FileReader(input), input.getName());
     }
     
     /**
-     * Returns the source code to the code in this file.
+     * Returns the code in this file.
      */
     public String getSource() {
         return String.join("\n", sourceLines);
@@ -85,7 +88,7 @@ public class JavaFile {
     
     /**
      * Returns the name of the file that stores this source code, sans
-     * the .java extension.
+     * .java extension.
      */
     public String getName() {
         return name.replace(".java", "");

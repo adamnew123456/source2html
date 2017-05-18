@@ -34,7 +34,8 @@ public class NegativeLookaheadParser implements Parser {
         do {
             StrongCheckpoint check = stream.strongCheckpoint();
             Optional<String> lookaheadResult = lookahead.tryParse(stream);
-            
+ 
+            // Ensure that the stream is not affected by the lookahead check
             if (check.needsRestore()) {
                 stream.restore();
             }

@@ -15,6 +15,14 @@ import java.util.List;
  * and then rendering them all to the output directory.
  */
 public class CodeProcessor {
+    /**
+     * Takes all the Java source code in the given input directory, and writes
+     * HTML versions into the output directory.
+     *
+     * The link prefix is put at the beginning of all links (both to code files as 
+     * well as Javascript and CSS). It should be the root of wherever the output
+     * is being served.
+     */
     public void run(File inDir, File outDir, String linkPrefix) {
         List<JavaFile> javaSource = readSourceFiles(inDir);
         List<Package> packages = Package.getPackages();

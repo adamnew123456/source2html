@@ -8,8 +8,10 @@ import java.util.Optional;
 public class AnyCharParser implements Parser {
     @Override
     public Optional<String> tryParse(CheckpointStream stream) {
-        if (stream.size() == 0) return Optional.empty();
-        else                    return Optional.of(String.valueOf(stream.get()));
+        if (stream.size() == 0) {
+            return Optional.empty();
+        } else {
+            return Optional.of(String.valueOf(stream.get()));
+        }
     }
-
 }

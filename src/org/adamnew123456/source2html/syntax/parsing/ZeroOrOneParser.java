@@ -17,7 +17,10 @@ public class ZeroOrOneParser implements Parser {
     public Optional<String> tryParse(CheckpointStream stream) {
         Optional<String> result = parser.tryParse(stream);
         
-        if (result.isPresent()) return result;
-        else                    return Optional.of("");
+        if (result.isPresent()) {
+            return result;
+        } else {
+            return Optional.of("");
+        }
     }
 }

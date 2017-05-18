@@ -18,7 +18,9 @@ public class EitherParser implements Parser {
         for (Parser parser: parsers) {
             Optional<String> result = parser.tryParse(stream);
             
-            if (result.isPresent()) return result;
+            if (result.isPresent()) {
+                return result;
+            }
         }
         
         return Optional.empty();
